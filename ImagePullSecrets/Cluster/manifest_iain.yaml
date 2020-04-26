@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Secret
+data:
+  .dockerconfigjson: ewoJImF1dGhzIjogewoJCSJodHRwczovL2luZGV4LmRvY2tlci5pby92MS8iOiB7CgkJCSJhdXRoIjogImMyMWhjblJwWTNVMU9qTXlZbVExWm1VekxXVTFORFF0TkdZMU9DMWlNelpqTFRJek5HWXhNalE0T0RZMllRPT0iCgkJfQoJfSwKCSJIdHRwSGVhZGVycyI6IHsKCQkiVXNlci1BZ2VudCI6ICJEb2NrZXItQ2xpZW50LzE5LjAzLjggKGxpbnV4KSIKCX0KfQ==
+metadata:
+  name: dockerhub
+  namespace: iain
+type: kubernetes.io/dockerconfigjson
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp
+  labels:
+    name: myapp
+  namespace: iain
+spec:
+  containers:
+  - name: myapp
+    image: smarticu5/demo_public
+    ports:
+      - containerPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: secretapp
+  labels:
+    name: secretapp
+  namespace: iain
+spec:
+  containers:
+  - name: secretapp
+    image: smarticu5/test_private_repository
+    ports:
+      - containerPort: 80
+  imagePullSecrets:
+  - name: dockerhub
